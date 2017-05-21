@@ -3,6 +3,7 @@ package com.jrsoft.learning.cleancoderscom.fixtures;
 import com.jrsoft.learning.cleancoderscom.Codecast;
 import com.jrsoft.learning.cleancoderscom.Context;
 import com.jrsoft.learning.cleancoderscom.GateKeeper;
+import com.jrsoft.learning.cleancoderscom.License;
 import com.jrsoft.learning.cleancoderscom.MockGateway;
 import com.jrsoft.learning.cleancoderscom.PresentCodecastUseCase;
 import com.jrsoft.learning.cleancoderscom.PresentableCodecast;
@@ -37,8 +38,12 @@ public class CodecastPresentation {
         }
     }
 
-    public boolean createLicenceForViewing(String user, String codecast) {
-        return false;
+    public boolean createLicenceForViewing(String userName, String codecastTitle) {
+        User user = Context.gateway.findUser(userName);
+        Codecast codecast = Context.gateway.findCodecastByTitle(codecastTitle);
+        License license = new License(user, codecast);
+        Context.gateway.save(license);
+        return useCase.isLicensedToViewCodecast(user, codecast);
     }
 
     public String presentationUser() {
@@ -46,7 +51,7 @@ public class CodecastPresentation {
     }
 
     public boolean clearCodecasts() {
-        new ArrayList<Codecast>(Context.gateway
+        new ArrayList<>(Context.gateway
                 .findAllCodecasts())
                 .forEach(codecast -> Context.gateway.delete(codecast));
 

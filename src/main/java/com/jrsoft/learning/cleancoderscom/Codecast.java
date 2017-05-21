@@ -11,4 +11,12 @@ public class Codecast {
     public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public boolean isSame(Codecast codecast) {
+        return true;
+    }
 }
