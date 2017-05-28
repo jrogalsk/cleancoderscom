@@ -3,7 +3,7 @@ package com.jrsoft.learning.cleancoderscom;
 import java.util.List;
 
 public interface Gateway {
-    List<Codecast> findAllCodecasts();
+    List<Codecast> findAllCodecastsSortedChronologically();
 
     void delete(Codecast codecast);
 

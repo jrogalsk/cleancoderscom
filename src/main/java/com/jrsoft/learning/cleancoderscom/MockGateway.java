@@ -1,6 +1,8 @@
 package com.jrsoft.learning.cleancoderscom;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -19,8 +21,14 @@ public class MockGateway implements Gateway {
     }
 
     @Override
-    public List<Codecast> findAllCodecasts() {
-        return codecasts;
+    public List<Codecast> findAllCodecastsSortedChronologically() {
+        List<Codecast> sortedCodecasts = new ArrayList<Codecast>(codecasts);
+        Collections.sort(sortedCodecasts, new Comparator<Codecast>() {
+            public int compare(Codecast o1, Codecast o2) {
+                return o1.getPublicationDate().compareTo(o2.getPublicationDate());
+            }
+        });
+        return sortedCodecasts;
     }
 
     @Override
@@ -35,7 +43,7 @@ public class MockGateway implements Gateway {
     }
 
     @Override
-    public User save(User user) { 
+    public User save(User user) {
         users.add((User) establishId(user));
         return user;
     }

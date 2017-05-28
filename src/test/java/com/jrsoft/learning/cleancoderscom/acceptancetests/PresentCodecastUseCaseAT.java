@@ -1,8 +1,8 @@
 package com.jrsoft.learning.cleancoderscom.acceptancetests;
 
-import com.jrsoft.learning.cleancoderscom.fixtures.CodecastPresentation;
-import com.jrsoft.learning.cleancoderscom.fixtures.GivenCodecasts;
-import com.jrsoft.learning.cleancoderscom.fixtures.OfCodeCasts;
+import com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures.CodecastPresentation;
+import com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures.GivenCodecasts;
+import com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures.OfCodeCasts;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,6 +36,18 @@ public class PresentCodecastUseCaseAT {
         givenUser("U");
         withUserLoggedIn("U");
         andTheLicensceForUserAbleToViewCodecast("U", "A");
+        thenTheFollowingCodecastWillBePresentedFor("U");
+        asOrderedCodecasts(); // <- should add assertions on expected results
+    }
+
+    @Test
+    public void presentDownloadableCodecastsScenario() {
+        givenCodecast("A", "3/1/2014");
+        givenCodecast("B", "3/2/2014");
+        givenCodecast("C", "2/18/2014");
+        givenUser("U");
+        withUserLoggedIn("U");
+        andWithLicenseForUserAbleToDownloadCodecast("U", "A");
         thenTheFollowingCodecastWillBePresentedFor("U");
         asOrderedCodecasts(); // <- should add assertions on expected results
     }
@@ -74,5 +86,9 @@ public class PresentCodecastUseCaseAT {
 
     private void andTheLicensceForUserAbleToViewCodecast(String userName, String codecastTitle) {
         assertTrue(codecastPresentationFixture.createLicenceForViewing(userName, codecastTitle));
+    }
+
+    private void andWithLicenseForUserAbleToDownloadCodecast(String user, String codecast) {
+        assertTrue(codecastPresentationFixture.createLicenceForDownloading(user, codecast));
     }
 }

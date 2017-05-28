@@ -1,4 +1,4 @@
-package com.jrsoft.learning.cleancoderscom.fixtures;
+package com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures;
 
 import com.jrsoft.learning.cleancoderscom.Codecast;
 import com.jrsoft.learning.cleancoderscom.Context;
@@ -12,6 +12,8 @@ import com.jrsoft.learning.cleancoderscom.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.jrsoft.learning.cleancoderscom.License.LicenseType.DOWNLOADING;
+import static com.jrsoft.learning.cleancoderscom.License.LicenseType.VIEWING;
 import static java.util.Objects.nonNull;
 
 public class CodecastPresentation {
@@ -32,8 +34,7 @@ public class CodecastPresentation {
         if (nonNull(user)) {
             gateKeeper.setLoggedInUser(user);
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -41,9 +42,9 @@ public class CodecastPresentation {
     public boolean createLicenceForViewing(String userName, String codecastTitle) {
         User user = Context.gateway.findUser(userName);
         Codecast codecast = Context.gateway.findCodecastByTitle(codecastTitle);
-        License license = new License(user, codecast);
+        License license = new License(VIEWING, user, codecast);
         Context.gateway.save(license);
-        return useCase.isLicensedToViewCodecast(user, codecast);
+        return useCase.isLicenseFor(VIEWING, user, codecast);
     }
 
     public String presentationUser() {
@@ -52,10 +53,10 @@ public class CodecastPresentation {
 
     public boolean clearCodecasts() {
         new ArrayList<>(Context.gateway
-                .findAllCodecasts())
+                .findAllCodecastsSortedChronologically())
                 .forEach(codecast -> Context.gateway.delete(codecast));
 
-        return Context.gateway.findAllCodecasts().size() == 0;
+        return Context.gateway.findAllCodecastsSortedChronologically().isEmpty();
     }
 
     public int countOfCodecastsPresented() {
@@ -63,4 +64,11 @@ public class CodecastPresentation {
         return presentations.size();
     }
 
+    public boolean createLicenceForDownloading(String userName, String codecastTitle) {
+        User user = Context.gateway.findUser(userName);
+        Codecast codecast = Context.gateway.findCodecastByTitle(codecastTitle);
+        License license = new License(DOWNLOADING, user, codecast);
+        Context.gateway.save(license);
+        return useCase.isLicenseFor(DOWNLOADING, user, codecast);
+    }
 }
