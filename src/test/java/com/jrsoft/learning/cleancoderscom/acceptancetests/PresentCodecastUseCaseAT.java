@@ -1,6 +1,8 @@
 package com.jrsoft.learning.cleancoderscom.acceptancetests;
 
 import com.jrsoft.learning.cleancoderscom.fixtures.CodecastPresentation;
+import com.jrsoft.learning.cleancoderscom.fixtures.GivenCodecasts;
+import com.jrsoft.learning.cleancoderscom.fixtures.OfCodeCasts;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,15 +24,32 @@ public class PresentCodecastUseCaseAT {
         givenNoCodecasts();
         givenUser("U");
         withUserLoggedIn("U");
-        thenTheFollowingCodecastWillBePresentedTo("U");
+        thenTheFollowingCodecastWillBePresentedFor("U");
         thereWillBeNoCodecastsPresented();
     }
 
     @Test
     public void presentViewableCodecastsInChronologicalOrderScenario() {
+        givenCodecast("A", "3/1/2014");
+        givenCodecast("B", "3/2/2014");
+        givenCodecast("C", "2/18/2014");
         givenUser("U");
         withUserLoggedIn("U");
         andTheLicensceForUserAbleToViewCodecast("U", "A");
+        thenTheFollowingCodecastWillBePresentedFor("U");
+        asOrderedCodecasts(); // <- should add assertions on expected results
+    }
+
+    private void asOrderedCodecasts() {
+        OfCodeCasts ofCodeCasts = new OfCodeCasts();
+        ofCodeCasts.query();
+    }
+
+    private void givenCodecast(String title, String published) {
+        GivenCodecasts givenCodecasts = new GivenCodecasts();
+        givenCodecasts.setTitle(title);
+        givenCodecasts.setPublished(published);
+        givenCodecasts.execute();
     }
 
     private void givenNoCodecasts() {
@@ -45,7 +64,7 @@ public class PresentCodecastUseCaseAT {
         assertTrue(codecastPresentationFixture.loginUser(userName));
     }
 
-    private void thenTheFollowingCodecastWillBePresentedTo(String userName) {
+    private void thenTheFollowingCodecastWillBePresentedFor(String userName) {
         assertThat(codecastPresentationFixture.presentationUser(), is(userName));
     }
 

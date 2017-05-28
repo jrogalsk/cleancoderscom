@@ -7,9 +7,9 @@ public interface Gateway {
 
     void delete(Codecast codecast);
 
-    void save(Codecast codecast);
+    Codecast save(Codecast codecast);
 
-    void save(User user);
+    User save(User user);
 
     User findUser(String username);
 

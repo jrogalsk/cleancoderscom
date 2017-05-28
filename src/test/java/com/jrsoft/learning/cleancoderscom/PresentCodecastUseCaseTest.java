@@ -3,44 +3,80 @@ package com.jrsoft.learning.cleancoderscom;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class PresentCodecastUseCaseTest {
 
     private User user;
     private Codecast codecast;
-    private License viewLicense;
+    private PresentCodecastUseCase useCase;
 
     @Before
     public void setUp() {
         Context.gateway = new MockGateway();
-        user = new User("User");
-        codecast = new Codecast();
-        viewLicense = new License(user, codecast);
+        user = Context.gateway.save(new User("User"));
+        codecast = Context.gateway.save(new Codecast());
+        useCase = new PresentCodecastUseCase();
     }
 
     @Test
     public void userWithoutViewLicense_cannotViewCodecast() {
-        PresentCodecastUseCase useCase = new PresentCodecastUseCase();
-
         assertFalse(useCase.isLicensedToViewCodecast(user, codecast));
     }
 
     @Test
     public void userWithLicense_canViewCodecast() {
-        PresentCodecastUseCase useCase = new PresentCodecastUseCase();
+        License viewLicense = new License(user, codecast);
         Context.gateway.save(viewLicense);
         assertTrue(useCase.isLicensedToViewCodecast(user, codecast));
     }
 
     @Test
     public void userWithoutLicense_cannotViewOtherUserCodecast() {
-        User otherUser = new User("otherUser");
-        Context.gateway.save(otherUser);
+        User otherUser = Context.gateway.save(new User("otherUser"));
 
-        PresentCodecastUseCase useCase = new PresentCodecastUseCase();
+        License viewLicense = new License(user, codecast);
         Context.gateway.save(viewLicense);
         assertFalse(useCase.isLicensedToViewCodecast(otherUser, codecast));
     }
+
+    @Test
+    public void presentingNoCodecasts() {
+        // this is generally wrong to do. We should not undo something that is done is setup.
+        Context.gateway.delete(codecast);
+
+        assertTrue(useCase.presentCodecasts(user).isEmpty());
+    }
+
+    @Test
+    public void presentOneCodecast() {
+        codecast.setTitle("Some Title");
+        codecast.setPublicationDate("Tomorrow");
+        List<PresentableCodecast> presentableCodecasts = useCase.presentCodecasts(user);
+        assertThat(presentableCodecasts.size(), is(1));
+        PresentableCodecast presentableCodecast = presentableCodecasts.get(0);
+        assertThat(presentableCodecast.title, is("Some Title"));
+        assertThat(presentableCodecast.publicationDate, is("Tomorrow"));
+    }
+
+    @Test
+    public void presentedCodecastIsNotViewableIfNoLicense() {
+        List<PresentableCodecast> presentableCodecasts = useCase.presentCodecasts(user);
+        PresentableCodecast presentableCodecast = presentableCodecasts.get(0);
+        assertFalse(presentableCodecast.isViewable);
+    }
+
+    @Test
+    public void presentedCodecastIsViewableIfLicenseExists() {
+        Context.gateway.save(new License(user, codecast));
+        List<PresentableCodecast> presentableCodecasts = useCase.presentCodecasts(user);
+        PresentableCodecast presentableCodecast = presentableCodecasts.get(0);
+        assertTrue(presentableCodecast.isViewable);
+    }
+
 }

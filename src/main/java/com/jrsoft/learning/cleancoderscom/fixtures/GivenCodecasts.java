@@ -23,6 +23,7 @@ public class GivenCodecasts {
         Codecast codecast = new Codecast();
         codecast.setTitle(title);
         codecast.setPublicationDate(publicationDate);
+
         Context.gateway.save(codecast);
     }
 }

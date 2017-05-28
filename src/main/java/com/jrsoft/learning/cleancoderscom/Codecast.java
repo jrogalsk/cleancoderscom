@@ -1,6 +1,6 @@
 package com.jrsoft.learning.cleancoderscom;
 
-public class Codecast {
+public class Codecast extends Entity {
     private String title;
     private String publicationDate;
 
@@ -18,5 +18,9 @@ public class Codecast {
 
     public boolean isSame(Codecast codecast) {
         return true;
+    }
+
+    public String getPublicationDate() {
+        return publicationDate;
     }
 }

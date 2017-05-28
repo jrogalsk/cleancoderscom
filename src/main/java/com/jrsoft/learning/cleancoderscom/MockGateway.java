@@ -29,19 +29,21 @@ public class MockGateway implements Gateway {
     }
 
     @Override
-    public void save(Codecast codecast) {
-        codecasts.add(codecast);
+    public Codecast save(Codecast codecast) {
+        codecasts.add((Codecast) establishId(codecast));
+        return codecast;
     }
 
     @Override
-    public void save(User user) {
-        establishId(user);
-        users.add(user);
+    public User save(User user) { 
+        users.add((User) establishId(user));
+        return user;
     }
 
-    private void establishId(User user) {
+    private Entity establishId(Entity user) {
         if (isNull(user.getId()))
             user.setId(UUID.randomUUID().toString());
+        return user;
     }
 
     @Override

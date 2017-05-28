@@ -1,6 +1,6 @@
 package com.jrsoft.learning.cleancoderscom;
 
-public class License {
+public class License extends Entity {
     private User user;
     private Codecast codecast;
 

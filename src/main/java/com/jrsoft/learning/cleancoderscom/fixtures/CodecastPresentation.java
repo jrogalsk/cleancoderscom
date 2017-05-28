@@ -16,7 +16,7 @@ import static java.util.Objects.nonNull;
 
 public class CodecastPresentation {
     private PresentCodecastUseCase useCase = new PresentCodecastUseCase();
-    private GateKeeper gateKeeper = new GateKeeper();
+    public static GateKeeper gateKeeper = new GateKeeper();
 
     public CodecastPresentation() {
         Context.gateway = new MockGateway();
