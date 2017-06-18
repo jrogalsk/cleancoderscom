@@ -1,5 +1,6 @@
-package com.jrsoft.learning.cleancoderscom;
+package com.jrsoft.learning.cleancoderscom.business;
 
+import com.jrsoft.learning.cleancoderscom.business.Entity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;

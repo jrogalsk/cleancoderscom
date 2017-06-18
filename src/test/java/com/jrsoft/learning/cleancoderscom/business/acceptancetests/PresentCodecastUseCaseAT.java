@@ -1,8 +1,8 @@
-package com.jrsoft.learning.cleancoderscom.acceptancetests;
+package com.jrsoft.learning.cleancoderscom.business.acceptancetests;
 
-import com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures.CodecastPresentation;
-import com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures.GivenCodecasts;
-import com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures.OfCodeCasts;
+import com.jrsoft.learning.cleancoderscom.business.acceptancetests.fixtures.CodecastPresentation;
+import com.jrsoft.learning.cleancoderscom.business.acceptancetests.fixtures.GivenCodecasts;
+import com.jrsoft.learning.cleancoderscom.business.acceptancetests.fixtures.OfCodeCasts;
 import org.junit.Before;
 import org.junit.Test;
 

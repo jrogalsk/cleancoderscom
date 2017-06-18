@@ -1,7 +1,7 @@
-package com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures;
+package com.jrsoft.learning.cleancoderscom.business.acceptancetests.fixtures;
 
-import com.jrsoft.learning.cleancoderscom.Codecast;
-import com.jrsoft.learning.cleancoderscom.Context;
+import com.jrsoft.learning.cleancoderscom.business.Codecast;
+import com.jrsoft.learning.cleancoderscom.business.Context;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,7 +28,7 @@ public class GivenCodecasts {
             Codecast codecast = new Codecast();
             codecast.setTitle(title);
             codecast.setPublicationDate(dateFormat.parse(publicationDate));
-            Context.gateway.save(codecast);
+            Context.codecastGateway.save(codecast);
         } catch (ParseException e) {
             throw new IllegalStateException(e);
         }

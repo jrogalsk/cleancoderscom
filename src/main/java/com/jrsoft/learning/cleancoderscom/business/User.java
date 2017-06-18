@@ -1,4 +1,4 @@
-package com.jrsoft.learning.cleancoderscom;
+package com.jrsoft.learning.cleancoderscom.business;
 
 public class User extends Entity {
     private String userName;

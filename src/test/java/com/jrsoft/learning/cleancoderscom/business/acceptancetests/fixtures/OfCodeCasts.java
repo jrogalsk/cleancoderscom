@@ -1,8 +1,8 @@
-package com.jrsoft.learning.cleancoderscom.acceptancetests.fixtures;
+package com.jrsoft.learning.cleancoderscom.business.acceptancetests.fixtures;
 
-import com.jrsoft.learning.cleancoderscom.PresentCodecastUseCase;
-import com.jrsoft.learning.cleancoderscom.PresentableCodecast;
-import com.jrsoft.learning.cleancoderscom.User;
+import com.jrsoft.learning.cleancoderscom.business.PresentCodecastUseCase;
+import com.jrsoft.learning.cleancoderscom.business.PresentableCodecast;
+import com.jrsoft.learning.cleancoderscom.business.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;

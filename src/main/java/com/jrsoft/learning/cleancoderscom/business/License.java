@@ -1,4 +1,4 @@
-package com.jrsoft.learning.cleancoderscom;
+package com.jrsoft.learning.cleancoderscom.business;
 
 public class License extends Entity {
     public enum LicenseType {VIEWING, DOWNLOADING}

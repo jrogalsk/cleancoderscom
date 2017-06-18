@@ -1,20 +1,15 @@
-package com.jrsoft.learning.cleancoderscom;
-
-import com.jrsoft.learning.cleancoderscom.License.LicenseType;
+package com.jrsoft.learning.cleancoderscom.business;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.jrsoft.learning.cleancoderscom.License.LicenseType.DOWNLOADING;
-import static com.jrsoft.learning.cleancoderscom.License.LicenseType.VIEWING;
 
 public class PresentCodecastUseCase {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("M/d/yyyy");
 
     public List<PresentableCodecast> presentCodecasts(User user) {
         ArrayList<PresentableCodecast> presentableCodecasts = new ArrayList<>();
-        List<Codecast> allCodecasts = Context.gateway.findAllCodecastsSortedChronologically();
+        List<Codecast> allCodecasts = Context.codecastGateway.findAllCodecastsSortedChronologically();
 
         for (Codecast codecast : allCodecasts)
             presentableCodecasts.add(formatCodecast(user, codecast));
@@ -26,13 +21,13 @@ public class PresentCodecastUseCase {
         PresentableCodecast pcc = new PresentableCodecast();
         pcc.title = codecast.getTitle();
         pcc.publicationDate = dateFormat.format(codecast.getPublicationDate());
-        pcc.isViewable = isLicenseFor(VIEWING, user, codecast);
-        pcc.isDownloadable = isLicenseFor(DOWNLOADING, user, codecast);
+        pcc.isViewable = isLicenseFor(License.LicenseType.VIEWING, user, codecast);
+        pcc.isDownloadable = isLicenseFor(License.LicenseType.DOWNLOADING, user, codecast);
         return pcc;
     }
 
-    public boolean isLicenseFor(LicenseType licenseType, User user, Codecast codecast) {
-        List<License> licenses = Context.gateway.findLicensesForUserAndCodecast(user, codecast);
+    public boolean isLicenseFor(License.LicenseType licenseType, User user, Codecast codecast) {
+        List<License> licenses = Context.licenseGateway.findLicensesForUserAndCodecast(user, codecast);
         for (License license : licenses) {
             if (license.getType() == licenseType)
                 return true;
