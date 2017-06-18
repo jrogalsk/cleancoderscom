@@ -94,6 +94,11 @@ public class SocketServerTest {
             server = new SocketServer(port, readingService);
         }
 
+        @After
+        public void tearDown() throws Exception {
+            server.stop();
+        }
+
         @Test
         public void canSendAndReceiveData() throws Exception {
             server.start();
@@ -111,27 +116,36 @@ public class SocketServerTest {
     }
 
     public class WithEchoSockerService {
-        private ReadingSocketService readingService;
+        private EchoSocketService echoService;
 
         @Before
         public void setUp() throws Exception {
-//            readingService = new ReadingSocketService();
-//            server = new SocketServer(port, readingService);
+            echoService = new EchoSocketService();
+            server = new SocketServer(port, echoService);
+        }
+
+        @After
+        public void tearDown() throws Exception {
+            server.stop();
         }
 
         @Test
-        public void canSendAndReceiveData() throws Exception {
-//            server.start();
-//            Socket socket = new Socket("localhost", port);
-//            OutputStream outputStream = socket.getOutputStream();
-//            outputStream.write("hello\n" .getBytes());
-//            synchronized (readingService) {
-//                readingService.wait();
-//            }
-//            server.stop();
-//
-//            assertEquals("hello", readingService.message);
+        public void canEcho() throws Exception {
+            server.start();
+            Socket socket = new Socket("localhost", port);
+            OutputStream outputStream = socket.getOutputStream();
+            outputStream.write("echo\n" .getBytes());
+            synchronized (echoService) {
+                echoService.wait();
+            }
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String response = br.readLine();
 
+            assertEquals("echo", response);
+
+            server.stop();
         }
     }
 
@@ -158,11 +172,15 @@ public class SocketServerTest {
     }
 
     public static class EchoSocketService extends TestSocketService {
-        public String message;
 
         @Override
         protected void doService(Socket s) throws IOException {
-//          ...
+            InputStream is = s.getInputStream();
+            BufferedReader br = new BufferedReader( new InputStreamReader(is));
+            String message = br.readLine();
+            OutputStream os = s.getOutputStream();
+            os.write(message.getBytes());
+            os.flush();
         }
     }
 
@@ -171,7 +189,9 @@ public class SocketServerTest {
         public void serve(Socket s) {
             try {
                 doService(s);
-                synchronized (this) {notify();}
+                synchronized (this) {
+                    notify();
+                }
                 s.close();
             } catch (IOException e) {
                 throw new IllegalStateException(e);
